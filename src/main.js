@@ -1,5 +1,28 @@
 // query selector variables go here 👇
+let image = document.querySelector(".poster-img")
+let title = document.querySelector(".poster-title")
+let quote = document.querySelector(".poster-quote")
+//forms
+let formSection = document.querySelector(".poster-form");
+let mainPosterSection = document.querySelector(".main-poster");
+let saveSection = document.querySelector(".saved-posters");
+let Unmotivated = document.querySelector(".Un-motivational-Posters");
 
+let posterImageInput = document.querySelector("#poster-image-url");
+let posterTitleInput = document.querySelector("#poster-title");
+let posterQuoteInput = document.querySelector("#poster-quote");
+let savedPostersGrid = document.querySelector(".saved-posters-grid");
+let unmotivatedGrid = document.querySelector(".Un-motivational-Posters-grid")
+//buttons
+let showFormBtn = document.querySelector(".show-form");
+let savePageBtn = document.querySelector(".show-saved");
+let returnMainBtn = document.querySelector(".show-main");
+let makePosterBtn = document.querySelector(".make-poster");
+let backToMainBtn = document.querySelector(".back-to-main");
+let savePosterBtn = document.querySelector(".save-poster");
+let randomBtn = document.querySelector(".show-random")
+let unmotivatedBtn = document.querySelector(".show-unmotivated")
+let unmotiToMainBtn = document.querySelector(".back-to-main-un")
 // we've provided you with some data to work with 👇
 // tip: you can tuck this data out of view with the dropdown found near the line number where the variable is declared 
 var images = [
@@ -99,11 +122,167 @@ var quotes = [
   "Each person must live their life as a model for others.",
   "A champion is defined not by their wins but by how they can recover when they fall."
 ];
+let unmotivationalPosters = [
+  {
+    name: "FAILURE",
+    description: "Why bother trying? It's probably not worth it.",
+    price: 68.00,
+    year: 2019,
+    vintage: true,
+    img_url: "./assets/failure.jpg",
+  },
+  {
+    name: "MEDIOCRITY",
+    description: "Dreams are just that—dreams.",
+    price: 127.00,
+    year: 2021,
+    vintage: false,
+    img_url: "./assets/mediocrity.jpg",
+  },
+  {
+    name: "REGRET",
+    description: "Hard work rarely pays off.",
+    price: 89.00,
+    year: 2018,
+    vintage: true,
+    img_url:  "./assets/regret.jpg",
+  },
+  {
+    name: "FUTILITY",
+    description: "You're not good enough.",
+    price: 150.00,
+    year: 2016,
+    vintage: false,
+    img_url:  "./assets/futility.jpg",
+  },
+  {
+    name: "DEFEAT",
+    description: "It's too late to start now.",
+    price: 35.00,
+    year: 2023,
+    vintage: false,
+    img_url:  "./assets/defeat.jpg",
+  },
+  {
+    name: "HOPELESSNESS",
+    description: "Stay in your comfort zone; it's safer.",
+    price: 112.00,
+    year: 2020,
+    vintage: true,
+    img_url: "./assets/hopelessness.jpg",
+  },
+  {
+    name: "LAZINESS",
+    description: "You can't change anything.",
+    price: 25.00,
+    year: 2022,
+    vintage: false,
+    img_url: "./assets/laziness.jpg",
+  },
+  {
+    name: "PROCRASTINATION",
+    description: "Better to avoid failure by not trying at all.",
+    price: 48.00,
+    year: 2017,
+    vintage: true,
+    img_url: "./assets/procrastination.jpg",
+  },
+  {
+    name: "DESPAIR",
+    description: "Let someone else do it; you’ll just mess it up.",
+    price: 73.00,
+    year: 2015,
+    vintage: false,
+    img_url: "./assets/despair.jpg",
+  },
+  {
+    name: "NEGLECT",
+    description: "Happiness is overrated.",
+    price: 160.00,
+    year: 2019,
+    vintage: true,
+    img_url: "./assets/neglect.jpg",
+  },
+  {
+    name: "FEAR",
+    description: "Giving up is always an option.",
+    price: 91.00,
+    year: 2014,
+    vintage: false,
+    img_url: "./assets/fear.jpg",
+  },
+  {
+    name: "APATHY",
+    description: "No one cares about your effort.",
+    price: 110.00,
+    year: 2016,
+    vintage: true,
+    img_url: "./assets/apathy.jpg",
+  },
+  {
+    name: "MISERY",
+    description: "Why take risks when you can stay stagnant?",
+    price: 55.00,
+    year: 2021,
+    vintage: false,
+    img_url: "./assets/misery.jpg",
+  },
+  {
+    name: "BLAME",
+    description: "Expect disappointment and you'll never be disappointed.",
+    price: 39.00,
+    year: 2017,
+    vintage: true,
+    img_url: "./assets/blame.jpg",
+  },
+  {
+    name: "DOUBT",
+    description: "Success is for other people, not you.",
+    price: 140.00,
+    year: 2020,
+    vintage: false,
+    img_url: "./assets/doubt.jpg",
+  }
+];
 var savedPosters = [];
 var currentPoster;
-
+var cleanedUnPosters = [];
 // event listeners go here 👇
+document.addEventListener("DOMContentLoaded", function() {
+  generateRandomPoster();
+});
 
+randomBtn.addEventListener("click", generateRandomPoster);
+
+showFormBtn.addEventListener("click", function() {
+  togglePage(formSection)
+});
+
+returnMainBtn.addEventListener("click", function() {
+  togglePage(mainPosterSection)
+});
+
+savePageBtn.addEventListener("click", function() {
+  togglePage(saveSection)
+});
+
+backToMainBtn.addEventListener("click", function() {
+  togglePage(mainPosterSection)
+});
+
+makePosterBtn.addEventListener("click", createCustomPoster);
+
+savePosterBtn.addEventListener("click", saveCurrentPoster);
+
+unmotivatedBtn.addEventListener("click", function() {
+  togglePage(Unmotivated);
+  cleanData(unmotivationalPosters);
+  displayUnmotivPosters();
+});
+
+unmotiToMainBtn.addEventListener("click", function() {
+  togglePage(mainPosterSection)
+})
 // functions and event handlers go here 👇
 // (we've provided two to get you started)!
 function getRandomIndex(array) {
@@ -117,3 +296,114 @@ function createPoster(imageURL, title, quote) {
     title: title, 
     quote: quote}
 }
+
+function cleanData(data) {
+
+for (var i = 0; i < data.length; i++) {
+  var unmotivationalPoster = data[i] 
+  var cleanPoster = createPoster(
+    unmotivationalPoster.img_url, 
+    unmotivationalPoster.name,
+    unmotivationalPoster.description
+  )
+  cleanedUnPosters.push(cleanPoster)
+  }
+}
+
+
+function togglePage(page) {
+  var allPages = [formSection, mainPosterSection, saveSection, Unmotivated]
+
+  for (var i = 0; i < allPages.length; i++) {
+    allPages[i].classList.add("hidden")
+  }
+  page.classList.remove("hidden")
+}
+
+function generateRandomPoster() {
+  const randomImage = images[getRandomIndex(images)];
+  const randomTitle = titles[getRandomIndex(titles)];
+  const randomQuote = quotes[getRandomIndex(quotes)];
+
+  currentPoster = createPoster(randomImage, randomTitle, randomQuote);
+
+  image.src = currentPoster.imageURL;
+  title.textContent = currentPoster.title;
+  quote.textContent = currentPoster.quote;
+}
+
+function createCustomPoster(event) {
+  event.preventDefault(); 
+
+  const customImage = posterImageInput.value;
+  const customTitle = posterTitleInput.value;
+  const customQuote = posterQuoteInput.value;
+
+  currentPoster = createPoster(customImage, customTitle, customQuote);
+
+  image.src = currentPoster.imageURL;
+  title.textContent = currentPoster.title;
+  quote.textContent = currentPoster.quote;
+
+  images.push(customImage);
+  titles.push(customTitle);
+  quotes.push(customQuote);
+
+  returnToMain();
+}
+
+function createMiniPoster(poster) {
+  const miniPoster = document.createElement("div");
+  miniPoster.classList.add("mini-poster");
+  miniPoster.innerHTML = `
+    <img src="${poster.imageURL}" alt="${poster.title}">
+    <h2>${poster.title}</h2>
+    <h4>${poster.quote}</h4>
+  `;
+  return miniPoster;
+}
+
+function saveCurrentPoster() {
+  if (!savedPosters.includes(currentPoster)) {
+      savedPosters.push(currentPoster);
+      displaySavedPosters()
+  }
+}
+
+
+function renderSavedPosters(posters, container) {
+  savedPostersGrid.innerHTML = "";
+  
+  posters.forEach((poster) => {
+    const miniPoster = createMiniPoster(poster);
+    container.appendChild(miniPoster);
+  });
+}
+
+function displaySavedPosters() {
+  renderSavedPosters(savedPosters, savedPostersGrid);
+}
+
+function displayUnmotivPosters() {
+  unmotivatedGrid.innerHTML = "";
+  for (var i = 0; i < cleanedUnPosters.length; i++) {
+    var newPoster = cleanedUnPosters[i]
+    unmotivatedGrid.innerHTML += `
+    <div class="miniPoster">
+      <img src="${newPoster.imageURL}">
+      <h2>${newPoster.title}</h2>
+      <h4>${newPoster.quote}</h4>
+    </div>
+    `
+  }
+}
+
+
+
+
+
+
+
+
+
+
