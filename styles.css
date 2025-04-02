@@ -144,10 +144,26 @@ button:hover {
   margin-bottom: 10px;
   text-transform: uppercase;
 }
+/*~~~ un-motivated posters ~~~*/
 
 .Un-motivational-Posters-grid {
+  
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   padding: 20px;
 }
+
+h2 {
+  font-size: 30px;
+  font-weight: normal;
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+img {
+  height:200px;
+  width: 300px;
+}
+
